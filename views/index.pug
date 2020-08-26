@@ -1,0 +1,12 @@
+extends layout
+
+block content
+  h1 Non-realtime
+  p(id='result')
+  button(onclick="takePicture()") Take Picture!
+  input(type='file' onchange="uploadPicture()" id='upload')
+  button(onclick="examplePicture()") Use Example!
+  button(onclick="redirectRealtime()") Realtime!
+  img(id='image')
+  br
+  script(async defer src='/javascripts/bodypix.js')
