@@ -1,12 +1,22 @@
 extends layout
 
 block content
-  h1 Non-realtime
-  p(id='result')
-  button(onclick="takePicture()") Take Picture!
-  input(type='file' onchange="uploadPicture()" id='upload')
-  button(onclick="examplePicture()") Use Example!
-  button(onclick="redirectRealtime()") Realtime!
-  img(id='image')
+  h1 Alavu Mantra
+  p(id='result') &nbsp;
+
+  .center#center
+    .btn-toolbar(role='toolbar', aria-label='Toolbar with button groups' style='justify-content: center; display: flex;')
+      .btn-group.mr-2(role='group')
+        button.btn.btn-primary(type='button' onclick="takePicture()") Take Picture
+      .input-group
+        .custom-file
+          input#upload.custom-file-input(type='file' onchange="uploadPicture()")
+          label#uploadLabel.custom-file-label(for='upload') Choose picture
+    br
+
+  //button(onclick="examplePicture()") Use Example!
+  //button(onclick="redirectRealtime()") Realtime!
+
+  img(id='image' style="display: none;")
   br
   script(async defer src='/javascripts/bodypix.js')
