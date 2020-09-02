@@ -1,3 +1,6 @@
+// ArUco fields
+let detector;
+
 // Document element fields
 let canvas;
 let ctx;
@@ -43,8 +46,10 @@ async function main() {
   camera = await loadCamera();
   canvas = createCanvas();
   ctx = canvas.getContext('2d');
+  detector = new AR.Detector();
 }
 
+// Call to main()
 main();
 
 
@@ -78,7 +83,7 @@ function createCanvas() {
 
 
 // Button onclick functions
-function takePicture() {
+function takePicture() { // this is the onclick of the "Take Picture" button
   console.log("Taking picture");
 
   camera.setAttribute("style", "display: none;");
@@ -95,7 +100,7 @@ function takePicture() {
   bodyPixMain(img);
 }
 
-function uploadPicture() {
+function uploadPicture() {  // this is the onchange of the file selector
   console.log("Uploading picture");
 
   camera.setAttribute("style", "display: none;");
@@ -134,6 +139,16 @@ function uploadPicture() {
 
   bodyPixMain(img);
 }*/
+
+// ArUco helper methods
+function arucoMain(imageData) {
+  console.log("Detecting ArUco markers...")
+  console.log(imageData)
+  console.log(detector)
+  var markers = detector.detect(imageData);
+  console.log(markers)
+  drawCorners(markers);
+}
 
 
 // BodyPix helper methods
@@ -242,6 +257,9 @@ function drawHeight(height, yTop, yBottom, rightMost) {
   ctx.lineTo(x, yBottom);
   ctx.lineWidth = 5;
   ctx.stroke();
+
+  var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  arucoMain(imageData);
 }
 
 function drawWidth(width, xLeft, xRight) {
@@ -263,6 +281,32 @@ function drawWidth(width, xLeft, xRight) {
   ctx.lineTo(xRight, y);
   ctx.lineWidth = 5;
   ctx.stroke();
+}
+
+function drawCorners(markers) {
+  var corners, corner, i, j;
+
+  ctx.lineWidth = 3;
+
+  for (i = 0; i !== markers.length; ++ i) {
+    corners = markers[i].corners;
+        
+    ctx.strokeStyle = "red";
+    ctx.beginPath();
+
+    for (j = 0; j !== corners.length; ++ j) {
+      corner = corners[j];
+      ctx.moveTo(corner.x, corner.y);
+      corner = corners[(j + 1) % corners.length];
+      ctx.lineTo(corner.x, corner.y);
+    }
+
+    ctx.stroke();
+    ctx.closePath();
+
+    ctx.strokeStyle = "green";
+    ctx.strokeRect(corners[0].x - 2, corners[0].y - 2, 4, 4);
+  }
 }
 
 /*function redirectRealtime() {
