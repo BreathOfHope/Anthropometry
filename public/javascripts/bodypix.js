@@ -1,5 +1,10 @@
+// Physical dimensions
+let actualHeight;
+let actualWidth;
+
 // ArUco fields
 let detector;
+let arucoDim = 10.16;
 
 // Document element fields
 let canvas;
@@ -10,6 +15,7 @@ let camera;
 let width = 720;
 let height = 540;
 let pixelHeight;
+let pixelWidth;
 
 // Body parts dictionary
 let parts = {
@@ -46,7 +52,6 @@ async function main() {
   camera = await loadCamera();
   canvas = createCanvas();
   ctx = canvas.getContext('2d');
-  detector = new AR.Detector();
 }
 
 // Call to main()
@@ -144,10 +149,34 @@ function uploadPicture() {  // this is the onchange of the file selector
 function arucoMain(imageData) {
   console.log("Detecting ArUco markers...")
   console.log(imageData)
+  detector = new AR.Detector();
   console.log(detector)
   var markers = detector.detect(imageData);
   console.log(markers)
   drawCorners(markers);
+  processCorners(markers);
+}
+
+function processCorners(markers) {
+  actualHeight = 0;
+  actualWidth = 0;
+
+  if (markers.length > 0) {
+    var xDiff = markers[0].corners[1].x - markers[0].corners[0].x;
+    var yDiff = markers[0].corners[2].y - markers[0].corners[1].y;
+
+    var xRatio = arucoDim / xDiff;
+    var yRatio = arucoDim / yDiff;
+
+    actualHeight = yRatio * pixelHeight;
+    actualWidth = xRatio * pixelWidth;
+  }
+
+  const result = document.getElementById('result')
+  result.innerHTML += '&emsp;';
+  result.innerHTML += 'Height: ' + actualHeight;
+  result.innerHTML += '&emsp;';
+  result.innerHTML += 'Width: ' + actualWidth;
 }
 
 
