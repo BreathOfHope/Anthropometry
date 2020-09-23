@@ -162,7 +162,7 @@ function processCorners(markers) {
   actualWidth = 0;
 
   if (markers.length > 0) {
-    var xDiff = markers[0].corners[1].x - markers[0].corners[0].x;
+    /*var xDiff = markers[0].corners[1].x - markers[0].corners[0].x;
     var yDiff = markers[0].corners[2].y - markers[0].corners[1].y;
 
     var xRatio = arucoDim / xDiff;
@@ -170,7 +170,22 @@ function processCorners(markers) {
 
     actualHeight = yRatio * pixelHeight;
     actualWidth = xRatio * pixelWidth;
+    */
+
+    var dist1 = distance(markers[0].corners[0], markers[0].corners[1]);
+    var dist2 = distance(markers[0].corners[1], markers[0].corners[2]);
+    var dist3 = distance(markers[0].corners[2], markers[0].corners[3]);
+    var dist4 = distance(markers[0].corners[3], markers[0].corners[0]);
+    var avgDist = (dist1 + dist2 + dist3 + dist4) / 4;
+
+    var ratio = arucoDim / avgDist;
+
+    actualHeight = ratio * pixelHeight;
+    actualWidth = ratio * pixelWidth;
   }
+
+  actualHeight = actualHeight.toFixed(2);
+  actualWidth = actualWidth.toFixed(2);
 
   const result = document.getElementById('result')
   result.innerHTML += '&emsp;';
@@ -179,14 +194,19 @@ function processCorners(markers) {
   result.innerHTML += 'Width: ' + actualWidth;
 }
 
+function distance(a, b) {
+  var dist = Math.sqrt(Math.pow(a.x - b.x, 2) + Math.pow(a.y - b.y, 2));
+  return dist;
+}
+
 
 // BodyPix helper methods
 function bodyPixMain(img) {
   const result = document.getElementById('result')
   result.innerHTML = 'Processing...';
   loadModel().then(model =>
-    segment(model, img).then(segmentations =>
-      calculatePixelHeight(segmentations)));
+    segment(model, img).then(segmentation =>
+      calculatePixelHeight(segmentation)));
 }
 
 async function loadModel() {
@@ -197,46 +217,48 @@ async function loadModel() {
 
 async function segment(model, img) {
   console.log("Segmenting image...");
-  const segmentation = await model.segmentPerson(img);
+  //const segmentation = await model.segmentPerson(img);
   const partSegmentation = await model.segmentPersonParts(img);
-  return [segmentation, partSegmentation];
+  //return [segmentation, partSegmentation];
+  return partSegmentation;
 }
 
 // Processing methods
-function calculatePixelHeight(segmentations) {
-  console.log(segmentations[0]);
-  console.log(segmentations[1]);
+function calculatePixelHeight(segmentation) {
+  //console.log(segmentations[0]);
+  //console.log(segmentations[1]);
+  console.log(segmentation);
   console.log("Calculating pixel height...");
 
   var top = -1;
   var bottom = -1;
 
-  for (var i = 0; i < segmentations[0].data.length; i++) {
-    if (segmentations[0].data[i] !== 0) {
+  for (var i = 0; i < segmentation.data.length; i++) {
+    if (segmentation.data[i] !== -1) {
       top = i;
       break;
     }
   }
 
-  for (var j = segmentations[0].data.length - 1; j >= 0; j--) {
-    if (segmentations[0].data[j] !== 0) {
+  for (var j = segmentation.data.length - 1; j >= 0; j--) {
+    if (segmentation.data[j] !== -1) {
       bottom = j;
       break;
     }
   }
 
-  var topRow = top / segmentations[0].width;
-  var bottomRow = bottom / segmentations[0].width;
+  var topRow = top / segmentation.width;
+  var bottomRow = bottom / segmentation.width;
 
   pixelHeight = parseInt(bottomRow) - parseInt(topRow);
   console.log('Pixel height: ' + pixelHeight);
 
   const result = document.getElementById('result')
-  result.innerHTML = 'Picture width: ' + segmentations[0].width;
+  result.innerHTML = 'Picture width: ' + segmentation.width;
   result.innerHTML += '&emsp;';
-  result.innerHTML += 'Picture height: ' + segmentations[0].height;
+  result.innerHTML += 'Picture height: ' + segmentation.height;
 
-  var rightMost = calculatePixelWidth(segmentations[1]);
+  var rightMost = calculatePixelWidth(segmentation);
   drawHeight(pixelHeight, topRow, bottomRow, rightMost);
 }
 
