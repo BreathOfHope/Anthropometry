@@ -160,6 +160,10 @@ function takePicture() { // this is the onclick of the "Take Picture" button
       ctx.fillText(weightText, 5, canvas.height - 5);
       ctx.fillText('Measured by Alavu Mantra at ' + localTime, 5, canvas.height - 50);
       document.getElementById('download-button').setAttribute("style", "display: inline;");
+    },
+    error: function(jqXHR, textStatus, errorThrown) {
+      console.log(textStatus)
+      console.log(errorThrown)
     }
   })
 }
@@ -227,6 +231,10 @@ function uploadPicture() {  // this is the onchange of the file selector
           ctx.fillText(weightText, 5, canvas.height - 5);
           ctx.fillText('Measured by Alavu Mantra at ' + localTime, 5, canvas.height - 50);
           document.getElementById('download-button').setAttribute("style", "display: inline;");
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+          console.log(textStatus)
+          console.log(errorThrown)
         }
       })
     }
