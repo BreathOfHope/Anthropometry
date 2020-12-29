@@ -1,3 +1,5 @@
+// Developed by: Abhishek Babu
+
 // Physical dimensions
 let actualHeight;
 let actualWidth;
