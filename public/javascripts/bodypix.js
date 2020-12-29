@@ -12,8 +12,8 @@ let ctx;
 let camera;
 
 // Image processing fields
-let width = 720;
-let height = 540;
+let width = 680;
+let height = 510;
 let pixelHeight;
 let pixelWidth;
 
@@ -45,28 +45,52 @@ let parts = {
   23: "right_foot"
 }
 
+var flag = true;
 
 // Main
 async function main() {
-  console.log("Loading...");
   camera = await loadCamera();
   canvas = createCanvas();
   ctx = canvas.getContext('2d');
 }
 
-// Call to main()
-main();
+var modal = document.getElementById("myModal");
 
+var span = document.getElementById("close");
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+  modal.style.display = "none";
+}
+
+function closeModal() {
+  modal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
+
+var downloadCanvas = function(){
+  var link = document.createElement('a');
+  link.download = 'alavu-mantra_' + localTime + '.png';
+  link.href = canvas.toDataURL()
+  link.click();
+}
+
+var localTime = new Date().toLocaleString('en-GB', { timeZone: 'UTC' })
+main();
 
 // Document elements helper methods
 async function loadCamera() {
-  console.log("Loading camera...");
-
   const cameraElement = document.createElement('video');
   cameraElement.width = width;
   cameraElement.height = height;
   cameraElement.setAttribute("style", "display: inline;")
-  document.getElementById('center').appendChild(cameraElement);
+  document.getElementById('right').appendChild(cameraElement);
 
   const capture = await navigator.mediaDevices.getUserMedia({ video: true });
   cameraElement.srcObject = capture;
@@ -76,20 +100,20 @@ async function loadCamera() {
 }
 
 function createCanvas() {
-  console.log("Creating canvas...");
-
   const canvasElement = document.createElement('canvas');
   canvasElement.width = width;
   canvasElement.height = height;
   canvasElement.setAttribute("style", "display: none;");
-  document.getElementById('center').appendChild(canvasElement);
+  document.getElementById('right').appendChild(canvasElement);
   return canvasElement;
 }
 
 
 // Button onclick functions
 function takePicture() { // this is the onclick of the "Take Picture" button
-  console.log("Taking picture");
+  document.getElementById('pic-button').disabled = true
+  document.getElementById('reset-button').disabled = true
+  document.getElementById('upload').disabled = true
 
   camera.setAttribute("style", "display: none;");
   canvas.setAttribute("style", "display: inline;");
@@ -100,59 +124,146 @@ function takePicture() { // this is the onclick of the "Take Picture" button
   img.width = width;
   img.height = height;
   img.setAttribute("style", "display: none;");
+  base64img = canvas.toDataURL('image/jpeg', 0.75);
+  base64img = base64img.replace('data:image/jpeg;base64,','')
   img.src = canvas.toDataURL('image/jpeg', 1.0);
 
   bodyPixMain(img);
+
+  $.ajax({
+    url: window.location,
+    type: "POST",
+    data: {
+      base64: base64img
+    },
+    success: function(result) {
+      document.getElementById('processing').innerHTML = '&nbsp;'
+      console.log('Estimated BMI: ' + result)
+      actualWeight = parseFloat(result) * ((actualHeight / 100)**2)
+      console.log('Estimated Weight: ' + actualWeight)
+      const res = document.getElementById('result')
+      res.innerHTML = '<b><u>Predicted results</u></b>'
+      res.innerHTML += '<br/>Estimated Height: ' + actualHeight.toFixed(2) + 'cm';
+      res.innerHTML += '<br/>Estimated BMI: ' + parseFloat(result).toFixed(2);
+      res.innerHTML += '<br/>Estimated Weight: ' + actualWeight.toFixed(2) + 'kg';
+      document.getElementById('reset-button').disabled = false
+      ctx.fillStyle = 'red';
+      ctx.strokeStyle = 'red';
+      ctx.font = '12px sans-serif'
+      heightText = 'Height: ' + actualHeight.toFixed(2) + 'cm';
+      bmiText = 'BMI: ' + parseFloat(result).toFixed(2)
+      weightText = 'Weight: ' + actualWeight.toFixed(2) + 'kg';
+      ctx.fillText(heightText, 5, canvas.height - 35);
+      ctx.fillText(bmiText, 5, canvas.height - 20);
+      ctx.fillText(weightText, 5, canvas.height - 5);
+      ctx.fillText('Measured by Alavu Mantra at ' + localTime, 5, canvas.height - 50);
+      document.getElementById('download-button').setAttribute("style", "display: inline;");
+    }
+  })
 }
 
 function uploadPicture() {  // this is the onchange of the file selector
-  console.log("Uploading picture");
-
+  document.getElementById('pic-button').disabled = true
+  document.getElementById('reset-button').disabled = true
+  document.getElementById('upload').disabled = true
   camera.setAttribute("style", "display: none;");
   canvas.setAttribute("style", "display: inline;");
 
-  const img = document.getElementById('image');
+  var img = document.getElementById('image');
 
   img.onload = function() {
-    canvas.width = img.width;
-    canvas.height = img.height;
-    ctx.drawImage(img, 0, 0);
-  }
+    if (flag) {
+      var MAX_WIDTH = 680;
+      var MAX_HEIGHT = 510;
+      var width = img.width;
+      var height = img.height;
+      console.log('Width: ' + width)
+      console.log('Height: ' + height)
+  
+      if (width > MAX_WIDTH) {
+        height *= MAX_WIDTH / width;
+        width = MAX_WIDTH;
+      }
+      if (height > MAX_HEIGHT) {
+        width *= MAX_HEIGHT / height;
+        height = MAX_HEIGHT;
+      }
+  
+      canvas.width = width;
+      canvas.height = height;
+      ctx.drawImage(img, 0, 0, width, height);
+      this.src = canvas.toDataURL('image/jpeg', 1.0)
 
-  img.src = URL.createObjectURL(document.getElementById('upload').files[0]);
+      base64img = canvas.toDataURL('image/jpeg', 0.75);
+      base64img = base64img.replace('data:image/jpeg;base64,','')
+      bodyPixMain(this);
+      $.ajax({
+        url: window.location,
+        type: "POST",
+        data: {
+          base64: base64img
+        },
+        success: function(result) {
+          document.getElementById('processing').innerHTML = '&nbsp;'
+          console.log('Estimated BMI: ' + result)
+          actualWeight = parseFloat(result) * ((actualHeight / 100)**2)
+          console.log('Estimated Weight: ' + actualWeight)
+          const res = document.getElementById('result')
+          res.innerHTML = '<b><u>Predicted results</u></b>'
+          res.innerHTML += '<br/>Estimated Height: ' + actualHeight.toFixed(2) + 'cm';
+          res.innerHTML += '<br/>Estimated BMI: ' + parseFloat(result).toFixed(2);
+          res.innerHTML += '<br/>Estimated Weight: ' + actualWeight.toFixed(2) + 'kg';
+          document.getElementById('reset-button').disabled = false
+          ctx.fillStyle = 'red';
+          ctx.strokeStyle = 'red';
+          ctx.font = '12px sans-serif'
+          heightText = 'Height: ' + actualHeight.toFixed(2) + 'cm';
+          bmiText = 'BMI: ' + parseFloat(result).toFixed(2)
+          weightText = 'Weight: ' + actualWeight.toFixed(2) + 'kg';
+          ctx.fillText(heightText, 5, canvas.height - 35);
+          ctx.fillText(bmiText, 5, canvas.height - 20);
+          ctx.fillText(weightText, 5, canvas.height - 5);
+          ctx.fillText('Measured by Alavu Mantra at ' + localTime, 5, canvas.height - 50);
+          document.getElementById('download-button').setAttribute("style", "display: inline;");
+        }
+      })
+    }
+    flag = false
+  }
 
   document.getElementById('uploadLabel').innerHTML = document.getElementById('upload').files[0].name.toString();
 
-  bodyPixMain(img);
+  img.src = URL.createObjectURL(document.getElementById('upload').files[0]);
 }
 
-/*function examplePicture() {
-  console.log("Using example picture...");
-
-  camera.setAttribute("style", "display: none;");
-  canvas.setAttribute("style", "display: inline;");
-
-  const img = document.getElementById('image');
-
-  img.onload = function() {
-    canvas.width = img.width;
-    canvas.height = img.height;
-    ctx.drawImage(img, 0, 0);
-  }
-
-  img.src = '/images/forest.jpeg';
-
-  bodyPixMain(img);
-}*/
+function reset() {
+  flag = true
+  canvas.setAttribute("style", "display: none;");
+  document.getElementById('download-button').setAttribute("style", "display: none;");
+  camera.setAttribute("style", "display: inline;");
+  document.getElementById('processing').innerHTML = '&nbsp;'
+  document.getElementById('result').innerHTML = '&nbsp;'
+  document.getElementById('pic-button').disabled = false
+  document.getElementById('upload').disabled = false
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  canvas.width = 680
+  canvas.height = 510
+  document.getElementById('upload').value = '';
+  document.getElementById('uploadLabel').innerHTML = 'Choose picture'
+  document.getElementById('image').remove()
+  const img = document.createElement('img')
+  img.id = 'image'
+  img.setAttribute("style", "display: none;")
+  document.body.appendChild(img)
+}
 
 // ArUco helper methods
 function arucoMain(imageData) {
-  console.log("Detecting ArUco markers...")
-  console.log(imageData)
   detector = new AR.Detector();
-  console.log(detector)
   var markers = detector.detect(imageData);
-  console.log(markers)
+  if (markers.length < 1 || markers == undefined) {
+    modal.style.display = "block";
+  }
   drawCorners(markers);
   processCorners(markers);
 }
@@ -184,14 +295,10 @@ function processCorners(markers) {
     actualWidth = ratio * pixelWidth;
   }
 
-  actualHeight = actualHeight.toFixed(2);
-  actualWidth = actualWidth.toFixed(2);
-
-  const result = document.getElementById('result')
-  result.innerHTML += '&emsp;';
-  result.innerHTML += 'Height: ' + actualHeight;
-  result.innerHTML += '&emsp;';
-  result.innerHTML += 'Width: ' + actualWidth;
+  //result.innerHTML += '&emsp;';
+  //result.innerHTML += '&emsp;';
+  //result.innerHTML += 'Width: ' + actualWidth;
+  console.log('Estimated Height: ' + actualHeight)
 }
 
 function distance(a, b) {
@@ -202,21 +309,19 @@ function distance(a, b) {
 
 // BodyPix helper methods
 function bodyPixMain(img) {
-  const result = document.getElementById('result')
-  result.innerHTML = 'Processing...';
+  const processing = document.getElementById('processing')
+  processing.innerHTML = '<strong>Processing...</strong>';
   loadModel().then(model =>
     segment(model, img).then(segmentation =>
       calculatePixelHeight(segmentation)));
 }
 
 async function loadModel() {
-  console.log("Loading model...")
   const model = await bodyPix.load();
   return model;
 }
 
 async function segment(model, img) {
-  console.log("Segmenting image...");
   //const segmentation = await model.segmentPerson(img);
   const partSegmentation = await model.segmentPersonParts(img);
   //return [segmentation, partSegmentation];
@@ -225,11 +330,6 @@ async function segment(model, img) {
 
 // Processing methods
 function calculatePixelHeight(segmentation) {
-  //console.log(segmentations[0]);
-  //console.log(segmentations[1]);
-  console.log(segmentation);
-  console.log("Calculating pixel height...");
-
   var top = -1;
   var bottom = -1;
 
@@ -254,16 +354,15 @@ function calculatePixelHeight(segmentation) {
   console.log('Pixel height: ' + pixelHeight);
 
   const result = document.getElementById('result')
-  result.innerHTML = 'Picture width: ' + segmentation.width;
-  result.innerHTML += '&emsp;';
-  result.innerHTML += 'Picture height: ' + segmentation.height;
+  //result.innerHTML = 'Picture width: ' + segmentation.width;
+  //result.innerHTML += '&emsp;';
+  //result.innerHTML += 'Picture height: ' + segmentation.height;
 
   var rightMost = calculatePixelWidth(segmentation);
   drawHeight(pixelHeight, topRow, bottomRow, rightMost);
 }
 
 function calculatePixelWidth(segmentation) {
-  console.log("Calculating pixel width");
 
   var left = Number.POSITIVE_INFINITY;
   var right = -1;
@@ -285,7 +384,7 @@ function calculatePixelWidth(segmentation) {
   pixelWidth = parseInt(right) - parseInt(left);
   console.log('Pixel width: ' + pixelWidth);
 
-  drawWidth(pixelWidth, left, right);
+  //drawWidth(pixelWidth, left, right);
 
   return rightMost;
 }
@@ -297,11 +396,11 @@ function drawHeight(height, yTop, yBottom, rightMost) {
   ctx.fillStyle = 'red';
   ctx.strokeStyle = 'red';
 
-  ctx.font = '32px serif'
+  /*ctx.font = '32px serif'
   yText = parseInt((yTop + yBottom) / 2);
   xText = x + 10;
   maxWidth = parseInt(0.1 * canvas.width) - 10;
-  ctx.fillText(height.toString(), xText, yText, maxWidth);
+  ctx.fillText(height.toString(), xText, yText, maxWidth);*/
 
   ctx.beginPath();
   ctx.moveTo(x, yTop);
@@ -363,3 +462,48 @@ function drawCorners(markers) {
 /*function redirectRealtime() {
   window.location.href += "realtime";
 }*/
+
+function showLeft() {
+  document.getElementById('left').setAttribute("style", "display: block;");
+  document.getElementById('center').setAttribute("style", "display: none;");
+  document.getElementById('right').setAttribute("style", "display: none;");
+  if (!document.getElementById("btn1").className.match(/(?:^|\s)active(?!\S)/)) {
+    document.getElementById('btn1').className += ' active'
+  }
+  if (document.getElementById("btn2").className.match(/(?:^|\s)active(?!\S)/)) {
+    document.getElementById("btn2").className = document.getElementById("btn2").className.replace( /(?:^|\s)active(?!\S)/g , '' )
+  }
+  if (document.getElementById("btn3").className.match(/(?:^|\s)active(?!\S)/)) {
+    document.getElementById("btn3").className = document.getElementById("btn3").className.replace( /(?:^|\s)active(?!\S)/g , '' )
+  }
+}
+
+function showCenter() {
+  document.getElementById('left').setAttribute("style", "display: none;");
+  document.getElementById('center').setAttribute("style", "display: block;");
+  document.getElementById('right').setAttribute("style", "display: none;");
+  if (!document.getElementById("btn2").className.match(/(?:^|\s)active(?!\S)/)) {
+    document.getElementById('btn2').className += ' active'
+  }
+  if (document.getElementById("btn1").className.match(/(?:^|\s)active(?!\S)/)) {
+    document.getElementById("btn1").className = document.getElementById("btn2").className.replace( /(?:^|\s)active(?!\S)/g , '' )
+  }
+  if (document.getElementById("btn3").className.match(/(?:^|\s)active(?!\S)/)) {
+    document.getElementById("btn3").className = document.getElementById("btn3").className.replace( /(?:^|\s)active(?!\S)/g , '' )
+  }
+}
+
+function showRight() {
+  document.getElementById('left').setAttribute("style", "display: none;");
+  document.getElementById('center').setAttribute("style", "display: none;");
+  document.getElementById('right').setAttribute("style", "display: block;");
+  if (!document.getElementById("btn3").className.match(/(?:^|\s)active(?!\S)/)) {
+    document.getElementById('btn3').className += ' active'
+  }
+  if (document.getElementById("btn2").className.match(/(?:^|\s)active(?!\S)/)) {
+    document.getElementById("btn2").className = document.getElementById("btn2").className.replace( /(?:^|\s)active(?!\S)/g , '' )
+  }
+  if (document.getElementById("btn1").className.match(/(?:^|\s)active(?!\S)/)) {
+    document.getElementById("btn1").className = document.getElementById("btn3").className.replace( /(?:^|\s)active(?!\S)/g , '' )
+  }
+}

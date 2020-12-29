@@ -1,22 +1,82 @@
 extends layout
 
 block content
-  h1 Alavu Mantra
-  p(id='result') &nbsp;
 
-  .center#center
-    .btn-toolbar(role='toolbar', aria-label='Toolbar with button groups' style='justify-content: center; display: flex;')
+  .modal#myModal
+    .modal-content
+      .right-align
+        span.close#close &times;
+      p No ArUco marker has been detected. Please use an image with the ArUco marker printout shown in good lighting for the best results. Only BMI is computed now.
+      .right-align
+        button.btn.btn-primary#ok(type='button' onclick="closeModal()" style='width: 250px;') Ok
+
+  h1 Alavu Mantra
+  .btn-toolbar(role='toolbar' aria-label='Menu' style='justify-content: center; display: flex;')
+    .btn-group.mr-5(role='group')
+      button.btn.btn-info.active(id='btn1' type='button' onclick="showLeft()" style='width: 300px;') Home
+    .btn-group.mr-5(role='group')
+      button.btn.btn-info(id='btn2' type='button' onclick="showCenter()" style='width: 300px;') Instructions
+    .btn-group(role='group')
+      button.btn.btn-info(id='btn3' type='button' onclick="showRight()" style='width: 300px;') Try It
+
+  .div#left
+    img(src='images/ruler.png' width="100")
+    h4 Overview
+    h6 Alavu Mantra is a web-based anthropometric application prototype primarily designed to help people who cannot feasibly access in-person healthcare in the current pandemic due to being high-risk individuals – pregnant women, young children, and the elderly. The web application uses machine learning and computer vision techniques to generate estimated measurements of the height and weight of a person. The project is currently in the quality assessment and testing phase before we move forward with conducting a beta release. In conjunction with the beta release, the nonprofit organization #[a(href='https://breathofhope.in/' target='_blank') BreathOfHope] will be contacting local hospitals in India to integrate the application with their healthcare providers for remote checkups of patients’ physical information without the need for an in-person visit.
+    h4 Credits
+    h6 This application is powered by:
+    ul(style='display: inline-block; text-align:left;')
+      li TensorFlow's #[a(href='https://github.com/tensorflow/tfjs-models/tree/master/body-pix' target='_blank') BodyPix] library
+      li Leo Simmons' #[a(href='https://github.com/lsimmons2/bmi-project' target='_blank') TensorFlow BMI prediction model]
+      li The cloud platform #[a(href='https://www.heroku.com/' target='_blank') Heroku]
+    br
+    br
+    h4 Disclaimer
+    ul(style='display: inline-block; text-align:left;')
+      li Alavu Mantra does not store any of the user's information
+      li It is in the user's discretion to use this application and to share the results with their respective healthcare providers
+      li Neither BreathOfHope nor the developers claim any responsibility for the predicted results
+      li This application provides estimated height, weight and BMI measurements with 60-70% confidence
+      li This application works best on a desktop browser (preferably Google Chrome) rather than a mobile phone
+      li This application only uses the webcam of the computer if the user chooses to use the webcam for taking pictures
+      li The pictures should have adequate and proper lighting for the best results
+      li Users should download and print the ArUco marker pdf in the #[a(href='javascript:;' onclick='showCenter();') #[i Instructions]] section and then #[a(href='javascript:;' onclick='showRight();') #[i Try It]]
+      li If you come across any offsets with the results and would like to volunteer your data, please contact BreathOfHope. #[br] Your data will be used in confidentiality to finetune the predictions
+
+  .div#center(style='display:none')
+    ul(style='display: inline-block; text-align:left; font-size: 16px;')
+      li First, download and print the ArUco marker in an A4 size sheet
+      a(href='assets/aruco.pdf' target='_blank')
+        button.btn.btn-primary(type='button' style='font: 14px "Open Sans", sans-serif;')
+          i.fa.fa-download &emsp;Download ArUco marker
+      li Place the marker printout on a wall or hold it adjacent to your body
+      li Take a full-size picture of the person and the marker with good lighting
+      li If not using the webcam, you can upload a full-size picture with the marker in the #[a(href='javascript:;' onclick='showRight();') #[i Try It]] section
+      li Download the picture with your results or note down the results computed for your use
+      li #[u Note:] these steps are demonstrated in the video below
+    br
+    iframe(width="560" height="315" src="https://www.youtube.com/embed/fC6z2C1CR8M" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen)
+    
+
+  .div#right(style='display: none;')
+    .btn-toolbar(role='toolbar', aria-label='Toolbar with button groups' style='justify-content: center; display: flex; padding-top: 10px; padding-bottom: 10px;')
       .btn-group.mr-2(role='group')
-        button.btn.btn-primary(type='button' onclick="takePicture()") Take Picture
+        button.btn.btn-primary(id='pic-button' type='button' onclick="takePicture()") Take Picture
       .input-group
         .custom-file
           input#upload.custom-file-input(type='file' onchange="uploadPicture()")
           label#uploadLabel.custom-file-label(for='upload') Choose picture
-    br
-
-  //button(onclick="examplePicture()") Use Example!
-  //button(onclick="redirectRealtime()") Realtime!
-
+      .btn-group.ml-2(role='group')
+        button.btn.btn-danger(id='reset-button' type='button' onclick="reset()") Reset
+      .btn-group.ml-2(role='group')
+        button.btn.btn-primary(id='download-button' type='button' onclick='downloadCanvas()' style='display: none;') Download Picture with Results
+      //.div(style='width: 100%; overflow: hidden;')
+      //.div#right-left(style='float: left; text-align: right;')
+      //.div#right-right(style='text-align: left; padding-left: 50px;')
+    p(id='processing') &nbsp;
+    .div(style='text-align: left;')
+      p(id='result' style='position: absolute; top: 50%; left: 85%; transform: translate(-85%, -50%);') &nbsp;
+  
   img(id='image' style="display: none;")
-  br
+
   script(async defer src='/javascripts/bodypix.js')
