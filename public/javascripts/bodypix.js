@@ -139,10 +139,12 @@ function takePicture() { // this is the onclick of the "Take Picture" button
       base64: base64img
     },
     success: function(result) {
+      if (parseInt(result) == 0) {
+        document.getElementById('modal-message').innerHTML = 'No face has been detected. Please ensure the person\'s face is shown in good lighting for the best results.'
+        modal.style.display = "block";
+      }
       document.getElementById('processing').innerHTML = '&nbsp;'
-      console.log('Estimated BMI: ' + result)
       actualWeight = parseFloat(result) * ((actualHeight / 100)**2)
-      console.log('Estimated Weight: ' + actualWeight)
       const res = document.getElementById('result')
       res.innerHTML = '<b><u>Predicted results</u></b>'
       res.innerHTML += '<br/>Estimated Height: ' + actualHeight.toFixed(2) + 'cm';
@@ -183,8 +185,6 @@ function uploadPicture() {  // this is the onchange of the file selector
       var MAX_HEIGHT = 510;
       var width = img.width;
       var height = img.height;
-      console.log('Width: ' + width)
-      console.log('Height: ' + height)
   
       if (width > MAX_WIDTH) {
         height *= MAX_WIDTH / width;
@@ -210,10 +210,12 @@ function uploadPicture() {  // this is the onchange of the file selector
           base64: base64img
         },
         success: function(result) {
+          if (parseInt(result) == 0) {
+            document.getElementById('modal-message').innerHTML = 'No face has been detected. Please ensure the person\'s face is shown in good lighting for the best results.'
+            modal.style.display = "block";
+          }
           document.getElementById('processing').innerHTML = '&nbsp;'
-          console.log('Estimated BMI: ' + result)
           actualWeight = parseFloat(result) * ((actualHeight / 100)**2)
-          console.log('Estimated Weight: ' + actualWeight)
           const res = document.getElementById('result')
           res.innerHTML = '<b><u>Predicted results</u></b>'
           res.innerHTML += '<br/>Estimated Height: ' + actualHeight.toFixed(2) + 'cm';
@@ -265,6 +267,8 @@ function reset() {
   img.id = 'image'
   img.setAttribute("style", "display: none;")
   document.body.appendChild(img)
+  document.getElementById('modal-message').innerHTML = 'No ArUco marker has been detected. Please use an image with the ArUco marker printout shown in good lighting for the best results. Only BMI is computed now.'
+  closeModal()
 }
 
 // ArUco helper methods
@@ -304,11 +308,6 @@ function processCorners(markers) {
     actualHeight = ratio * pixelHeight;
     actualWidth = ratio * pixelWidth;
   }
-
-  //result.innerHTML += '&emsp;';
-  //result.innerHTML += '&emsp;';
-  //result.innerHTML += 'Width: ' + actualWidth;
-  console.log('Estimated Height: ' + actualHeight)
 }
 
 function distance(a, b) {
@@ -361,12 +360,6 @@ function calculatePixelHeight(segmentation) {
   var bottomRow = bottom / segmentation.width;
 
   pixelHeight = parseInt(bottomRow) - parseInt(topRow);
-  console.log('Pixel height: ' + pixelHeight);
-
-  const result = document.getElementById('result')
-  //result.innerHTML = 'Picture width: ' + segmentation.width;
-  //result.innerHTML += '&emsp;';
-  //result.innerHTML += 'Picture height: ' + segmentation.height;
 
   var rightMost = calculatePixelWidth(segmentation);
   drawHeight(pixelHeight, topRow, bottomRow, rightMost);
@@ -392,9 +385,6 @@ function calculatePixelWidth(segmentation) {
   }
 
   pixelWidth = parseInt(right) - parseInt(left);
-  console.log('Pixel width: ' + pixelWidth);
-
-  //drawWidth(pixelWidth, left, right);
 
   return rightMost;
 }

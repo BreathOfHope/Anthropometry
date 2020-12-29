@@ -26,9 +26,7 @@ router.post('/', function(req, res) {
 
   var bmi;
   process.stdout.on('data', function (data) {
-    console.log('Pipe data from python script ...');
     bmi = data.toString();
-    console.log(bmi)
   });
 
   process.stderr.on('data', function (data) {
@@ -36,7 +34,6 @@ router.post('/', function(req, res) {
   })
 
   process.on('close', (code) => {
-    console.log(`child process close all stdio with code ${code}`);
     fs.unlink('./' + filename, function(err) {
       console.log(err)
     });

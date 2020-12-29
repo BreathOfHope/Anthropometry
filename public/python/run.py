@@ -42,3 +42,5 @@ if len(detected) > 0:
     predictions = model.predict(faces)
     pred = predictions[0][0] * 0.8
     print(pred)
+else:
+    print(0)
