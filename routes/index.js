@@ -29,7 +29,7 @@ router.post('/', function(req, res) {
     console.log('Pipe data from python script ...');
     bmi = data.toString();
     console.log(bmi)
-    return res.send(bmi)
+    res.send(bmi)
   });
 
   process.stderr.on('data', function (data) {
