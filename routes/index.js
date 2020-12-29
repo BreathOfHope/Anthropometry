@@ -29,7 +29,6 @@ router.post('/', function(req, res) {
     console.log('Pipe data from python script ...');
     bmi = data.toString();
     console.log(bmi)
-    res.send(bmi)
   });
 
   process.stderr.on('data', function (data) {
@@ -41,6 +40,7 @@ router.post('/', function(req, res) {
     fs.unlink('./' + filename, function(err) {
       console.log(err)
     });
+    res.send(bmi)
   });
 })
 
