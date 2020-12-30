@@ -8,8 +8,6 @@ var bodyParser = require('body-parser');
 var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-var realtimeRouter = require('./routes/realtime');
 
 var app = express();
 

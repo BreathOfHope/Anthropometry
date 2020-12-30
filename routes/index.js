@@ -18,7 +18,9 @@ router.post('/', function(req, res) {
   var filename = uuidv4();
   var img_data = req.body.base64
   fs.writeFile(filename, img_data, 'base64', function(err) {
-    console.log(err)
+    if (err !== null) {
+      console.log(err)
+    }
   });
 
   const scriptPath = 'public/python/run.py'
@@ -27,15 +29,33 @@ router.post('/', function(req, res) {
   var bmi;
   process.stdout.on('data', function (data) {
     bmi = data.toString();
+    fs.unlink('./' + filename, function(err) {
+      if (err !== null) {
+        if (err.code !== 'ENOENT') {
+          console.log(err)
+        }
+      }
+    });
   });
 
   process.stderr.on('data', function (data) {
     console.error(data.toString());
+    fs.unlink('./' + filename, function(err) {
+      if (err !== null) {
+        if (err.code !== 'ENOENT') {
+          console.log(err)
+        }
+      }
+    });
   })
 
   process.on('close', (code) => {
     fs.unlink('./' + filename, function(err) {
-      console.log(err)
+      if (err !== null) {
+        if (err.code !== 'ENOENT') {
+          console.log(err)
+        }
+      }
     });
     res.send(bmi)
   });
