@@ -2,6 +2,9 @@ from tensorflow.keras.models import Model
 from tensorflow.keras.applications import ResNet50
 from tensorflow.keras.layers import Dense
 import config
+import warnings
+
+warnings.filterwarnings("ignore")
 
 def get_age_model():
 

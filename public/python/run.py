@@ -8,6 +8,9 @@ import dlib
 import config
 from model import get_model
 import ssl
+import warnings
+
+warnings.filterwarnings("ignore")
 
 ssl._create_default_https_context = ssl._create_unverified_context
 

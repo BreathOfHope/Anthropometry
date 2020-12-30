@@ -39,14 +39,16 @@ router.post('/', function(req, res) {
   });
 
   process.stderr.on('data', function (data) {
-    console.error(data.toString());
-    fs.unlink('./' + filename, function(err) {
-      if (err !== null) {
-        if (err.code !== 'ENOENT') {
-          console.log(err)
+    if (!data.toString().includes("WARNING") && !data.toString().includes('Updating') && !data.toString().includes('Colocations') && !data.toString().includes('cpu_feature_guard')) {
+      console.error(data.toString());
+      fs.unlink('./' + filename, function(err) {
+        if (err !== null) {
+          if (err.code !== 'ENOENT') {
+            console.log(err)
+          }
         }
-      }
-    });
+      });
+    }
   })
 
   process.on('close', (code) => {

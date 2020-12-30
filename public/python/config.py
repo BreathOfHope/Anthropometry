@@ -1,3 +1,7 @@
+import warnings
+
+warnings.filterwarnings("ignore")
+
 RESNET50_DEFAULT_IMG_WIDTH = 224
 MARGIN = .1
 #TRAIN_BATCH_SIZE = 16
