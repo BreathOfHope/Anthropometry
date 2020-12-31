@@ -14,13 +14,15 @@ block content
   h1 Alavu Mantra
   .btn-toolbar(role='toolbar' aria-label='Menu' style='justify-content: center; display: flex;')
     .btn-group.mr-5(role='group')
-      button.btn.btn-info.active(id='btn1' type='button' onclick="showLeft()" style='width: 300px;') Home
+      button.btn.btn-info.active(id='btn1' type='button' onclick="showOne()" style='width: 250px;') Home
     .btn-group.mr-5(role='group')
-      button.btn.btn-info(id='btn2' type='button' onclick="showCenter()" style='width: 300px;') Instructions
+      button.btn.btn-info(id='btn2' type='button' onclick="showTwo()" style='width: 250px;') Instructions
+    .btn-group.mr-5(role='group')
+      button.btn.btn-info(id='btn3' type='button' onclick="showThree()" style='width: 250px;') Try It
     .btn-group(role='group')
-      button.btn.btn-info(id='btn3' type='button' onclick="showRight()" style='width: 300px;') Try It
+      button.btn.btn-info(id='btn4' type='button' onclick="showFour()" style='width: 250px;') Survey
 
-  .div#left
+  .div#one
     img(src='images/ruler.png' width="100")
     h4 Overview
     h6 Alavu Mantra is a web-based anthropometric application prototype primarily designed to help people who cannot feasibly access in-person healthcare in the current pandemic due to being high-risk individuals – pregnant women, young children, and the elderly. The web application uses machine learning and computer vision techniques to generate estimated measurements of the height and weight of a person. The project is currently in the quality assessment and testing phase before we move forward with conducting a beta release. In conjunction with the beta release, the nonprofit organization #[a(href='https://breathofhope.in/' target='_blank') BreathOfHope] will be contacting local hospitals in India to integrate the application with their healthcare providers for remote checkups of patients’ physical information without the need for an in-person visit.
@@ -44,7 +46,7 @@ block content
       li Users should download and print the ArUco marker pdf in the #[a(href='javascript:;' onclick='showCenter();') #[i Instructions]] section and then #[a(href='javascript:;' onclick='showRight();') #[i Try It]]
       li If you come across any offsets with the results and would like to volunteer your data, please contact BreathOfHope. #[br] Your data will be used in confidentiality to finetune the predictions
 
-  .div#center(style='display:none')
+  .div#two(style='display:none')
     ul(style='display: inline-block; text-align:left; font-size: 16px;')
       li First, download and print the ArUco marker in an A4 size sheet
       a(href='assets/aruco.pdf' target='_blank')
@@ -59,7 +61,7 @@ block content
     iframe(width="560" height="315" src="https://www.youtube.com/embed/SXS66NLWVTQ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen)
     
 
-  .div#right(style='display: none;')
+  .div#three(style='display: none;')
     .btn-toolbar(role='toolbar', aria-label='Toolbar with button groups' style='justify-content: center; display: flex; padding-top: 10px; padding-bottom: 10px;')
       .btn-group.mr-2(role='group')
         button.btn.btn-primary(id='pic-button' type='button' onclick="takePicture()") Take Picture
@@ -78,6 +80,9 @@ block content
     .div(style='text-align: left;')
       p(id='result' style='position: absolute; top: 50%; left: 85%; transform: translate(-85%, -50%);') &nbsp;
   
+  .div#four(style='display:none')
+    iframe(src='https://docs.google.com/forms/d/e/1FAIpQLSfxjvye3M44iW0Zzp6ESgp0t-ixQnDigs0fzmAeaRN9K1M2Vg/viewform?embedded=true' width='640' height='969' frameborder='0' marginheight='0' marginwidth='0' style='padding-top: 20px;') Loading&mldr;
+
   img(id='image' style="display: none;")
 
   script(async defer src='/javascripts/bodypix.js')

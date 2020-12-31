@@ -48,6 +48,7 @@ router.post('/', function(req, res) {
           }
         }
       });
+      return res.send(data.toString())
     }
   })
 
@@ -59,7 +60,7 @@ router.post('/', function(req, res) {
         }
       }
     });
-    res.send(bmi)
+    return res.send(bmi)
   });
 })
 

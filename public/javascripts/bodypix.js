@@ -92,7 +92,7 @@ async function loadCamera() {
   cameraElement.width = width;
   cameraElement.height = height;
   cameraElement.setAttribute("style", "display: inline;")
-  document.getElementById('right').appendChild(cameraElement);
+  document.getElementById('three').appendChild(cameraElement);
 
   const capture = await navigator.mediaDevices.getUserMedia({ video: true });
   cameraElement.srcObject = capture;
@@ -106,7 +106,7 @@ function createCanvas() {
   canvasElement.width = width;
   canvasElement.height = height;
   canvasElement.setAttribute("style", "display: none;");
-  document.getElementById('right').appendChild(canvasElement);
+  document.getElementById('three').appendChild(canvasElement);
   return canvasElement;
 }
 
@@ -166,6 +166,8 @@ function takePicture() { // this is the onclick of the "Take Picture" button
     error: function(jqXHR, textStatus, errorThrown) {
       console.log(textStatus)
       console.log(errorThrown)
+      document.getElementById('processing').innerHTML = 'Error encountered. Please try again after some time.'
+      document.getElementById('reset-button').disabled = false
     }
   })
 }
@@ -237,6 +239,8 @@ function uploadPicture() {  // this is the onchange of the file selector
         error: function(jqXHR, textStatus, errorThrown) {
           console.log(textStatus)
           console.log(errorThrown)
+          document.getElementById('processing').innerHTML = 'Error encountered. Please try again after some time.'
+          document.getElementById('reset-button').disabled = false
         }
       })
     }
@@ -463,10 +467,11 @@ function drawCorners(markers) {
   window.location.href += "realtime";
 }*/
 
-function showLeft() {
-  document.getElementById('left').setAttribute("style", "display: block;");
-  document.getElementById('center').setAttribute("style", "display: none;");
-  document.getElementById('right').setAttribute("style", "display: none;");
+function showOne() {
+  document.getElementById('one').setAttribute("style", "display: block;");
+  document.getElementById('two').setAttribute("style", "display: none;");
+  document.getElementById('three').setAttribute("style", "display: none;");
+  document.getElementById('four').setAttribute("style", "display: none;");
   if (!document.getElementById("btn1").className.match(/(?:^|\s)active(?!\S)/)) {
     document.getElementById('btn1').className += ' active'
   }
@@ -476,27 +481,35 @@ function showLeft() {
   if (document.getElementById("btn3").className.match(/(?:^|\s)active(?!\S)/)) {
     document.getElementById("btn3").className = document.getElementById("btn3").className.replace( /(?:^|\s)active(?!\S)/g , '' )
   }
+  if (document.getElementById("btn4").className.match(/(?:^|\s)active(?!\S)/)) {
+    document.getElementById("btn4").className = document.getElementById("btn4").className.replace( /(?:^|\s)active(?!\S)/g , '' )
+  }
 }
 
-function showCenter() {
-  document.getElementById('left').setAttribute("style", "display: none;");
-  document.getElementById('center').setAttribute("style", "display: block;");
-  document.getElementById('right').setAttribute("style", "display: none;");
+function showTwo() {
+  document.getElementById('two').setAttribute("style", "display: block;");
+  document.getElementById('one').setAttribute("style", "display: none;");
+  document.getElementById('three').setAttribute("style", "display: none;");
+  document.getElementById('four').setAttribute("style", "display: none;");
   if (!document.getElementById("btn2").className.match(/(?:^|\s)active(?!\S)/)) {
     document.getElementById('btn2').className += ' active'
   }
   if (document.getElementById("btn1").className.match(/(?:^|\s)active(?!\S)/)) {
-    document.getElementById("btn1").className = document.getElementById("btn2").className.replace( /(?:^|\s)active(?!\S)/g , '' )
+    document.getElementById("btn1").className = document.getElementById("btn1").className.replace( /(?:^|\s)active(?!\S)/g , '' )
   }
   if (document.getElementById("btn3").className.match(/(?:^|\s)active(?!\S)/)) {
     document.getElementById("btn3").className = document.getElementById("btn3").className.replace( /(?:^|\s)active(?!\S)/g , '' )
   }
+  if (document.getElementById("btn4").className.match(/(?:^|\s)active(?!\S)/)) {
+    document.getElementById("btn4").className = document.getElementById("btn4").className.replace( /(?:^|\s)active(?!\S)/g , '' )
+  }
 }
 
-function showRight() {
-  document.getElementById('left').setAttribute("style", "display: none;");
-  document.getElementById('center').setAttribute("style", "display: none;");
-  document.getElementById('right').setAttribute("style", "display: block;");
+function showThree() {
+  document.getElementById('three').setAttribute("style", "display: block;");
+  document.getElementById('two').setAttribute("style", "display: none;");
+  document.getElementById('one').setAttribute("style", "display: none;");
+  document.getElementById('four').setAttribute("style", "display: none;");
   if (!document.getElementById("btn3").className.match(/(?:^|\s)active(?!\S)/)) {
     document.getElementById('btn3').className += ' active'
   }
@@ -504,6 +517,28 @@ function showRight() {
     document.getElementById("btn2").className = document.getElementById("btn2").className.replace( /(?:^|\s)active(?!\S)/g , '' )
   }
   if (document.getElementById("btn1").className.match(/(?:^|\s)active(?!\S)/)) {
-    document.getElementById("btn1").className = document.getElementById("btn3").className.replace( /(?:^|\s)active(?!\S)/g , '' )
+    document.getElementById("btn1").className = document.getElementById("btn1").className.replace( /(?:^|\s)active(?!\S)/g , '' )
+  }
+  if (document.getElementById("btn4").className.match(/(?:^|\s)active(?!\S)/)) {
+    document.getElementById("btn4").className = document.getElementById("btn4").className.replace( /(?:^|\s)active(?!\S)/g , '' )
+  }
+}
+
+function showFour() {
+  document.getElementById('four').setAttribute("style", "display: block;");
+  document.getElementById('two').setAttribute("style", "display: none;");
+  document.getElementById('three').setAttribute("style", "display: none;");
+  document.getElementById('one').setAttribute("style", "display: none;");
+  if (!document.getElementById("btn4").className.match(/(?:^|\s)active(?!\S)/)) {
+    document.getElementById('btn4').className += ' active'
+  }
+  if (document.getElementById("btn2").className.match(/(?:^|\s)active(?!\S)/)) {
+    document.getElementById("btn2").className = document.getElementById("btn2").className.replace( /(?:^|\s)active(?!\S)/g , '' )
+  }
+  if (document.getElementById("btn3").className.match(/(?:^|\s)active(?!\S)/)) {
+    document.getElementById("btn3").className = document.getElementById("btn3").className.replace( /(?:^|\s)active(?!\S)/g , '' )
+  }
+  if (document.getElementById("btn1").className.match(/(?:^|\s)active(?!\S)/)) {
+    document.getElementById("btn1").className = document.getElementById("btn1").className.replace( /(?:^|\s)active(?!\S)/g , '' )
   }
 }
