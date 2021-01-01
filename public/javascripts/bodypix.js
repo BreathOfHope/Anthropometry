@@ -139,6 +139,7 @@ function takePicture() { // this is the onclick of the "Take Picture" button
       base64: base64img
     },
     success: function(result) {
+      console.log(result)
       if (parseInt(result) == 0) {
         document.getElementById('modal-message').innerHTML = 'No face has been detected. Please ensure the person\'s face is shown in good lighting for the best results.'
         modal.style.display = "block";
@@ -212,6 +213,7 @@ function uploadPicture() {  // this is the onchange of the file selector
           base64: base64img
         },
         success: function(result) {
+          console.log(result)
           if (parseInt(result) == 0) {
             document.getElementById('modal-message').innerHTML = 'No face has been detected. Please ensure the person\'s face is shown in good lighting for the best results.'
             modal.style.display = "block";
