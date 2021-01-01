@@ -474,6 +474,7 @@ function showOne() {
   document.getElementById('two').setAttribute("style", "display: none;");
   document.getElementById('three').setAttribute("style", "display: none;");
   document.getElementById('four').setAttribute("style", "display: none;");
+  document.getElementById('five').setAttribute("style", "display: none;");
   if (!document.getElementById("btn1").className.match(/(?:^|\s)active(?!\S)/)) {
     document.getElementById('btn1').className += ' active'
   }
@@ -486,6 +487,9 @@ function showOne() {
   if (document.getElementById("btn4").className.match(/(?:^|\s)active(?!\S)/)) {
     document.getElementById("btn4").className = document.getElementById("btn4").className.replace( /(?:^|\s)active(?!\S)/g , '' )
   }
+  if (document.getElementById("btn5").className.match(/(?:^|\s)active(?!\S)/)) {
+    document.getElementById("btn5").className = document.getElementById("btn5").className.replace( /(?:^|\s)active(?!\S)/g , '' )
+  }
 }
 
 function showTwo() {
@@ -493,6 +497,7 @@ function showTwo() {
   document.getElementById('one').setAttribute("style", "display: none;");
   document.getElementById('three').setAttribute("style", "display: none;");
   document.getElementById('four').setAttribute("style", "display: none;");
+  document.getElementById('five').setAttribute("style", "display: none;");
   if (!document.getElementById("btn2").className.match(/(?:^|\s)active(?!\S)/)) {
     document.getElementById('btn2').className += ' active'
   }
@@ -505,6 +510,9 @@ function showTwo() {
   if (document.getElementById("btn4").className.match(/(?:^|\s)active(?!\S)/)) {
     document.getElementById("btn4").className = document.getElementById("btn4").className.replace( /(?:^|\s)active(?!\S)/g , '' )
   }
+  if (document.getElementById("btn5").className.match(/(?:^|\s)active(?!\S)/)) {
+    document.getElementById("btn5").className = document.getElementById("btn5").className.replace( /(?:^|\s)active(?!\S)/g , '' )
+  }
 }
 
 function showThree() {
@@ -512,6 +520,7 @@ function showThree() {
   document.getElementById('two').setAttribute("style", "display: none;");
   document.getElementById('one').setAttribute("style", "display: none;");
   document.getElementById('four').setAttribute("style", "display: none;");
+  document.getElementById('five').setAttribute("style", "display: none;");
   if (!document.getElementById("btn3").className.match(/(?:^|\s)active(?!\S)/)) {
     document.getElementById('btn3').className += ' active'
   }
@@ -524,6 +533,9 @@ function showThree() {
   if (document.getElementById("btn4").className.match(/(?:^|\s)active(?!\S)/)) {
     document.getElementById("btn4").className = document.getElementById("btn4").className.replace( /(?:^|\s)active(?!\S)/g , '' )
   }
+  if (document.getElementById("btn5").className.match(/(?:^|\s)active(?!\S)/)) {
+    document.getElementById("btn5").className = document.getElementById("btn5").className.replace( /(?:^|\s)active(?!\S)/g , '' )
+  }
 }
 
 function showFour() {
@@ -531,6 +543,7 @@ function showFour() {
   document.getElementById('two').setAttribute("style", "display: none;");
   document.getElementById('three').setAttribute("style", "display: none;");
   document.getElementById('one').setAttribute("style", "display: none;");
+  document.getElementById('five').setAttribute("style", "display: none;");
   if (!document.getElementById("btn4").className.match(/(?:^|\s)active(?!\S)/)) {
     document.getElementById('btn4').className += ' active'
   }
@@ -543,4 +556,65 @@ function showFour() {
   if (document.getElementById("btn1").className.match(/(?:^|\s)active(?!\S)/)) {
     document.getElementById("btn1").className = document.getElementById("btn1").className.replace( /(?:^|\s)active(?!\S)/g , '' )
   }
+  if (document.getElementById("btn5").className.match(/(?:^|\s)active(?!\S)/)) {
+    document.getElementById("btn5").className = document.getElementById("btn5").className.replace( /(?:^|\s)active(?!\S)/g , '' )
+  }
+}
+
+function showFive() {
+  document.getElementById('five').setAttribute("style", "display: block;");
+  document.getElementById('two').setAttribute("style", "display: none;");
+  document.getElementById('three').setAttribute("style", "display: none;");
+  document.getElementById('four').setAttribute("style", "display: none;");
+  document.getElementById('one').setAttribute("style", "display: none;");
+  if (!document.getElementById("btn5").className.match(/(?:^|\s)active(?!\S)/)) {
+    document.getElementById('btn5').className += ' active'
+  }
+  if (document.getElementById("btn2").className.match(/(?:^|\s)active(?!\S)/)) {
+    document.getElementById("btn2").className = document.getElementById("btn2").className.replace( /(?:^|\s)active(?!\S)/g , '' )
+  }
+  if (document.getElementById("btn3").className.match(/(?:^|\s)active(?!\S)/)) {
+    document.getElementById("btn3").className = document.getElementById("btn3").className.replace( /(?:^|\s)active(?!\S)/g , '' )
+  }
+  if (document.getElementById("btn4").className.match(/(?:^|\s)active(?!\S)/)) {
+    document.getElementById("btn4").className = document.getElementById("btn4").className.replace( /(?:^|\s)active(?!\S)/g , '' )
+  }
+  if (document.getElementById("btn1").className.match(/(?:^|\s)active(?!\S)/)) {
+    document.getElementById("btn1").className = document.getElementById("btn1").className.replace( /(?:^|\s)active(?!\S)/g , '' )
+  }
+}
+
+// Replace with your view ID.
+var VIEW_ID = '235009059';
+
+// Query the API and print the results to the page.
+function queryReports() {
+  gapi.client.request({
+    path: '/v4/reports:batchGet',
+    root: 'https://analyticsreporting.googleapis.com/',
+    method: 'POST',
+    body: {
+      reportRequests: [
+        {
+          viewId: VIEW_ID,
+          dateRanges: [
+            {
+              startDate: '7daysAgo',
+              endDate: 'today'
+            }
+          ],
+          metrics: [
+            {
+              expression: 'ga:sessions'
+            }
+          ]
+        }
+      ]
+    }
+  }).then(displayResults, console.error.bind(console));
+}
+
+function displayResults(response) {
+  var formattedJson = JSON.stringify(response.result, null, 2);
+  document.getElementById('query-output').value = formattedJson;
 }

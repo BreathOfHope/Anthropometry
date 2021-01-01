@@ -14,13 +14,15 @@ block content
   h1 Alavu Mantra
   .btn-toolbar(role='toolbar' aria-label='Menu' style='justify-content: center; display: flex;')
     .btn-group.mr-5(role='group')
-      button.btn.btn-info.active(id='btn1' type='button' onclick="showOne()" style='width: 250px;') Home
+      button.btn.btn-info.active(id='btn1' type='button' onclick="showOne()" style='width: 200px;') Home
     .btn-group.mr-5(role='group')
-      button.btn.btn-info(id='btn2' type='button' onclick="showTwo()" style='width: 250px;') Instructions
+      button.btn.btn-info(id='btn2' type='button' onclick="showTwo()" style='width: 200px;') Instructions
     .btn-group.mr-5(role='group')
-      button.btn.btn-info(id='btn3' type='button' onclick="showThree()" style='width: 250px;') Try It
+      button.btn.btn-info(id='btn3' type='button' onclick="showThree()" style='width: 200px;') Try It
+    .btn-group.mr-5(role='group')
+      button.btn.btn-info(id='btn4' type='button' onclick="showFour()" style='width: 200px;') Survey
     .btn-group(role='group')
-      button.btn.btn-info(id='btn4' type='button' onclick="showFour()" style='width: 250px;') Survey
+      button.btn.btn-info(id='btn5' type='button' onclick="showFive()" style='width: 200px;') Metrics
 
   .div#one
     img(src='images/ruler.png' width="100")
@@ -82,6 +84,15 @@ block content
   
   .div#four(style='display:none')
     iframe(src='https://docs.google.com/forms/d/e/1FAIpQLSfxjvye3M44iW0Zzp6ESgp0t-ixQnDigs0fzmAeaRN9K1M2Vg/viewform?embedded=true' width='1000' height='600' frameborder='0' marginheight='0' marginwidth='0' style='padding-top: 20px;') Loading&mldr;
+  
+  .div#five(style='display:none')
+    br
+    iframe(src='https://docs.google.com/spreadsheets/d/e/2PACX-1vRqPdfO-qKiqN_M7soCx5EZCclDQgEZK8TJhMHqEmd2Gzq0cz_6PHNqf6kuBkz1H16zgVS8b6CzdLAV/pubhtml?widget=true&headers=false' width='700' height='600')
+    //h1 Hello Analytics Reporting API V4
+    // The Sign-in button. This will run `queryReports()` on success.
+    //p.g-signin2(data-onsuccess='queryReports')
+    // The API response will be printed here.
+    //textarea#query-output(cols='80' rows='20')
 
   img(id='image' style="display: none;")
 
