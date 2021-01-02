@@ -35,7 +35,7 @@ function queryData(res, analytics, jwtClient) {
       console.log(err);
       return;
     }
-    //console.log(JSON.stringify(response, null, 4));
+    console.log(JSON.stringify(response, null, 4));
     num_sessions = response['data']['totalsForAllResults']['ga:sessions']
     res.render('index', {visits: num_sessions})
   })
