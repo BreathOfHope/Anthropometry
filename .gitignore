@@ -3,3 +3,4 @@ node_modules
 __pycache__
 venv
 .DS_Store
+service-account.py
