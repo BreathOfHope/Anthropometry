@@ -93,7 +93,8 @@ async function loadCamera() {
   try {
     capture = await navigator.mediaDevices.getUserMedia({ video: true });
   } catch (err) {
-    alert('No camera device detected')
+    document.getElementById('modal-message').innerHTML = 'No camera device detected.'
+    modal.style.display = "block";
     cameraExists = false;
     document.getElementById('pic-button').disabled = true
     return null;
@@ -294,6 +295,7 @@ function arucoMain(imageData) {
   detector = new AR.Detector();
   var markers = detector.detect(imageData);
   if (markers.length < 1 || markers == undefined) {
+    document.getElementById('modal-message').innerHTML = 'No ArUco marker has been detected. Please use an image with the ArUco marker printout shown in good lighting for the best results. Only BMI is computed now.'
     modal.style.display = "block";
   }
   drawCorners(markers);
