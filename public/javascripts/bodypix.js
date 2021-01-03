@@ -186,7 +186,9 @@ function uploadPicture() {  // this is the onchange of the file selector
   document.getElementById('pic-button').disabled = true
   document.getElementById('reset-button').disabled = true
   document.getElementById('upload').disabled = true
-  camera.setAttribute("style", "display: none;");
+  if (cameraExists) {
+    camera.setAttribute("style", "display: none;");
+  }
   canvas.setAttribute("style", "display: inline;");
 
   var img = document.getElementById('image');
