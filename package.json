@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node --expose-gc --optimize_for_size --max_old_space_size=460 ./bin/www"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",

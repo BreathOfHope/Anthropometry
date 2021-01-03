@@ -5,7 +5,7 @@ var router = express.Router();
 
 /* GET home page. */
 var {google} = require('googleapis');
-var key = require('../sublime-seat-300320-f720717e13a4.json');
+var key = require('../alavu-mantra-d09a06ed42bb.json');
 router.get('/', function(req, res, next) {
   let jwtClient = new google.auth.JWT(
     key.client_email, null, key.private_key,
@@ -23,7 +23,7 @@ router.get('/', function(req, res, next) {
 });
 
 function queryData(res, analytics, jwtClient) {
-  const viewID = 'ga:235009059';
+  const viewID = 'ga:235094678';
   analytics.data.ga.get({
     'auth': jwtClient,
     'ids': viewID,
@@ -35,7 +35,7 @@ function queryData(res, analytics, jwtClient) {
       console.log(err);
       return;
     }
-    console.log(JSON.stringify(response, null, 4));
+    //console.log(JSON.stringify(response, null, 4));
     num_sessions = response['data']['totalsForAllResults']['ga:sessions']
     res.render('index', {visits: num_sessions})
   })
@@ -46,6 +46,7 @@ const {spawn} = require('child_process');
 var fs = require('fs');
 const { v4: uuidv4 } = require('uuid');
 router.post('/', function(req, res) {
+  global.gc();
   var filename = uuidv4();
   var img_data = req.body.base64
   fs.writeFile(filename, img_data, 'base64', function(err) {

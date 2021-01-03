@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "alavu-mantra",
+  "private_key_id": "d09a06ed42bb9c6943bcaf21a8d26762f8e9a107",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCgqPDMfA6Tx8Ee\n52ZrjUL1dcrPoTtxrxVQQSxqQ81t5je3BEN9DTcVPv4BQtvaxPtGNu+gFlA3OE4Y\nMP0pViIBeZIZPSpESLAB+EXl9D0u4bTVurKhjGNIZP9IGV87k4QvtC5wSCGWsWTR\nlsuEYtseQRcpguOpwUmsNp8Ledi9TsFyRtmmDQY7Ntbok8zRpoXTRrTqJ12/Ei/9\nfm9M/ztfc7WD8o1r8hqTCPIxHtlakSjRrEDxiRC5XvF3kaXkpx3hqH8K1c7DvF9i\nif+Y7FuC8FffBWk/cjUrqtOAt5NBcwD0YQk7m+VTwAMVjxFA2voSMUryaS1TsEZp\nu0oE34dBAgMBAAECggEAQoCr7HkNr65oClrO0oZOyTxRD1E2QgCvWeEgeXxHdM5v\nEZr6NLFbs7e3fN4oE46mVJI47pNN8Q2lhe4BXTMCMIoaJ8hhzpIoCSi0BlPrX5Se\nPjph5u0ty7HC2h1mhkqx1O1Iq8Gv5ajYislYxRwGh6d55vz/MC2KSXbyrtVpGjLv\ned80Tj3ZX/bsVFEKcNuR8e5EN4zDa2Kiz2UJ0dpi0wRCjbDYVX+Mz8rw0V50x80G\nJneRi+wqBXMGknYCSm8ig5eUZp/PLbKakcwlr4lYfSNLOQIZOgVs8Tpk3L1YVJ8Z\nQuDU3nHQohx2QFFOb7PyvfN8oDJ4qbBLN4RgsjbhYQKBgQDQlNSI7Kj2vw98UFD1\nlsUHj2qb2UOpV0zs50HmRsdEMY8aBxRu0EwmgfMYiAx27+p++cSLJb6x2r8JGo0S\na8+4xG6/qcnjuvOzvEOAjv+sGU/vYbcp9hiszAYtY784vFBWUzCm4sSBx9Fna992\nmDulowlmUoM1mSKP71UKTAw5awKBgQDFLyS5iK1LEgGkUmDmKO6aTALYAsNKLxfL\nQkA5Fi8DW7n56YwAMxcY1qfGN8MiHLlnwNNTnvf9A6UA2Nw3qs4QAbncYr5BbESh\nCfCDdUk9lP/66Dr5pGh9g+LzDLfVeyz0JGCz4yihCYGEEElSU3FUt9+LqHAJu4al\nRGzQm7BRAwKBgA6TmBbJkzVLPOXPJxlCpBpXJ3gkwtm+xB16O9y/7YUSgZGsFP15\niRjX1AlO2LAnLBgblGS1CpKbWuZj+J/k8OtUrviuAPHtSsKw0XbWh3+bdT6hcY95\nJ1hMGdJqOh7Y6jReM/Q1vM3lDPlRTJiZIvH8ZtfDxG+meAffDe5eSixpAoGBAL9P\noyEDk6bPPJqSdoM4WW+IqgWsgI9cK4jAqZD5jfmDKGhpiLS03QbzVOpDNebF2bjp\nY9+wz8hCnfe5b8fux2jOU+aYQyE0i013WEwjIkFGbCmi4X1OXzbQHARWZZIRpSbm\nmJBPqB6+G1PnfUwLu1xH3fMhJDq9H8D/J1gqhaHDAoGANSuK41jfLZmjhaTg64WQ\njfHtoy0qhlb+raTo4jTRZpUopB4A6oO4unaCJs+enGqBrqTWeEGaG93hXaP7ewqQ\n+TR0t3UR0foNCfWIHK4K3HS6XaaandvoW8OYRic782kjJFhpwHS2Tmh0lxa6ULj/\nPU5OCwwJMkT/5Pw2872Kwew=\n-----END PRIVATE KEY-----\n",
+  "client_email": "alavu-127@alavu-mantra.iam.gserviceaccount.com",
+  "client_id": "103340345190876668682",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/alavu-127%40alavu-mantra.iam.gserviceaccount.com"
+}
