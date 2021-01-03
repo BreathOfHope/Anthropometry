@@ -18,6 +18,7 @@ let width = 680;
 let height = 510;
 let pixelHeight;
 let pixelWidth;
+let cameraExists = true;
 
 // Body parts dictionary
 let parts = {
@@ -88,13 +89,22 @@ main();
 
 // Document elements helper methods
 async function loadCamera() {
+  let capture;
+  try {
+    capture = await navigator.mediaDevices.getUserMedia({ video: true });
+  } catch (err) {
+    alert('No camera device detected')
+    cameraExists = false;
+    document.getElementById('pic-button').disabled = true
+    return null;
+  }
+
   const cameraElement = document.createElement('video');
   cameraElement.width = width;
   cameraElement.height = height;
   cameraElement.setAttribute("style", "display: inline;")
   document.getElementById('three').appendChild(cameraElement);
 
-  const capture = await navigator.mediaDevices.getUserMedia({ video: true });
   cameraElement.srcObject = capture;
   cameraElement.play();
 
@@ -256,10 +266,12 @@ function reset() {
   flag = true
   canvas.setAttribute("style", "display: none;");
   document.getElementById('download-button').setAttribute("style", "display: none;");
-  camera.setAttribute("style", "display: inline;");
+  if (cameraExists) {
+    camera.setAttribute("style", "display: inline;");
+    document.getElementById('pic-button').disabled = false
+  }
   document.getElementById('processing').innerHTML = '&nbsp;'
   document.getElementById('result').innerHTML = '&nbsp;'
-  document.getElementById('pic-button').disabled = false
   document.getElementById('upload').disabled = false
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   canvas.width = 680
